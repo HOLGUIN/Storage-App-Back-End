@@ -1,8 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from conn_mongo import getConnection
-from conn_mongo import getConnection
-from usuarios import getUsuarios
+from usuarios import getUsuarios, postUsuario
 app = Flask(__name__)
 
 app.config["JSON_SORT_KEYS"] = False
@@ -17,6 +16,9 @@ def main():
 def usuariosApi():
     if request.method == 'GET':
         modelo = getUsuarios(mongo)
+        return jsonify({'response': modelo})
+    if request.method == 'POST':
+        modelo = postUsuario(mongo, request.json) 
         return jsonify({'response': modelo})
 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
